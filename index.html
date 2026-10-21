@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="es">
+<head>
+<title>Planes Fuengirola–Málaga</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root {
+  --bg: #eef2f5;
+  --surface: #ffffff;
+  --ink: #15212b;
+  --muted: #55667a;
+  --line: #d3dce4;
+  --accent: #0c7a85;
+  --accent-ink: #ffffff;
+  --accent-soft: #dff1f3;
+  --ok: #1f7a4a;
+  --ok-soft: #dcf0e3;
+  --warn: #c2570c;
+  --none: #5d6b78;
+  --none-soft: #e4e9ee;
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+  --font-body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --font-data: "JetBrains Mono", ui-monospace, "Consolas", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e151b; --surface: #16212a; --ink: #e7eef3; --muted: #93a5b4; --line: #2a3945;
+    --accent: #4cc3cc; --accent-ink: #06222a; --accent-soft: #123a40;
+    --ok: #6cc38c; --ok-soft: #153626; --warn: #f0a36b; --none: #9aabb8; --none-soft: #222f3a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e151b; --surface: #16212a; --ink: #e7eef3; --muted: #93a5b4; --line: #2a3945;
+  --accent: #4cc3cc; --accent-ink: #06222a; --accent-soft: #123a40;
+  --ok: #6cc38c; --ok-soft: #153626; --warn: #f0a36b; --none: #9aabb8; --none-soft: #222f3a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  margin: 0;
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  padding-block: 0 96px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1040px; margin: 0 auto; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+header { padding-block: 36px 16px; display: grid; gap: 14px; }
+.eyebrow { font-family: var(--font-data); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(32px, 6vw, 56px); line-height: 1.02; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+.lede { max-width: 62ch; color: var(--muted); margin: 0; font-size: 16px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 6px 0 0; padding: 0; list-style: none; font-size: 13px; color: var(--muted); }
+.facts strong { color: var(--ink); font-weight: 600; }
+
+.controls { display: grid; gap: 10px; padding-block: 8px 4px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.row-label { font-family: var(--font-data); font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); min-width: 64px; }
+.chip {
+  font: 500 13px var(--font-body); color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer;
+}
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+.route { margin-top: 18px; display: grid; gap: 0; }
+.station { position: relative; padding-left: 26px; padding-bottom: 30px; border-left: 2px solid var(--line); margin-left: 7px; }
+.station:last-child { border-left-color: transparent; padding-bottom: 8px; }
+.station::before {
+  content: ""; position: absolute; left: -9px; top: 4px; width: 16px; height: 16px;
+  border-radius: 50%; background: var(--bg); border: 3px solid var(--accent);
+}
+.station h2 { font-family: var(--font-display); font-weight: 700; font-size: 24px; margin: 0; line-height: 1.2; }
+.station .sub { margin: 2px 0 14px; color: var(--muted); font-size: 13px; }
+.flat h2 { font-family: var(--font-display); font-weight: 700; font-size: 24px; margin: 0 0 2px; }
+.flat .sub { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr)); gap: 14px; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+  overflow: hidden; display: grid; grid-template-rows: auto 1fr; min-width: 0;
+}
+.card.picked { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.art { display: block; width: 100%; height: 104px; background: var(--accent-soft); }
+.car { position: relative; }
+.slides { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; height: 190px; scrollbar-width: none; background: var(--accent-soft); }
+.slides::-webkit-scrollbar { display: none; }
+.slide { flex: 0 0 100%; scroll-snap-align: start; position: relative; display: block; min-width: 0; }
+.slide img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; }
+.vid { background: #0e151b; color: #fff; display: grid; place-items: center; text-decoration: none; text-align: center; align-content: center; gap: 10px; }
+.vid .play { width: 54px; height: 54px; border-radius: 50%; background: #fff; display: grid; place-items: center; margin: 0 auto; }
+.vid .play::after { content: ""; border-left: 16px solid #0e151b; border-top: 10px solid transparent; border-bottom: 10px solid transparent; margin-left: 4px; }
+.vid .cap { font: 600 13px var(--font-body); }
+.vid .cap small { display: block; font-weight: 400; opacity: .75; }
+.dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; pointer-events: none; }
+.dots i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.55); box-shadow: 0 0 2px rgba(0,0,0,.6); }
+.dots i.on { background: #fff; }
+.emb { background: #0e151b; }
+.emb iframe { width: 100%; height: 100%; border: 0; display: block; }
+.nav { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(14,21,27,.65); color: #fff; font: 600 22px/1 var(--font-body); cursor: pointer; display: grid; place-items: center; padding: 0; }
+.nav.prev { left: 8px; }
+.nav.next { right: 8px; }
+.body { padding: 16px; display: grid; grid-template-rows: auto auto 1fr auto; gap: 12px; min-width: 0; }
+.top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.kind { font-family: var(--font-data); font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin: 0 0 4px; }
+.card h3 { font-family: var(--font-display); font-size: 19px; line-height: 1.2; margin: 0; font-weight: 700; text-wrap: balance; }
+.price { text-align: right; flex-shrink: 0; }
+.price .amt { font-family: var(--font-data); font-weight: 700; font-size: 20px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.price .per { font-size: 11px; color: var(--muted); max-width: 12ch; margin-left: auto; }
+.badge { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 999px; width: fit-content; }
+.badge.ok { background: var(--ok-soft); color: var(--ok); }
+.badge.none { background: var(--none-soft); color: var(--none); }
+.pricenote { font-size: 12.5px; color: var(--muted); margin: 6px 0 0; }
+dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 13.5px; align-content: start; }
+dt { color: var(--muted); }
+dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.forthree { font-size: 13.5px; margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
+.forthree b { font-weight: 600; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.add {
+  font: 600 13px var(--font-body); background: transparent; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 6px; padding: 8px 12px; cursor: pointer;
+}
+.add[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.visit { font-size: 13px; font-weight: 500; }
+.empty { color: var(--muted); padding: 20px 0; }
+
+footer { margin-top: 14px; padding-top: 22px; border-top: 1px solid var(--line); display: grid; gap: 18px; }
+footer h2 { font-family: var(--font-display); font-size: 18px; margin: 0 0 6px; }
+footer p, footer li { font-size: 13.5px; color: var(--muted); margin: 0; }
+footer ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+
+.tray {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding-top: 10px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.tray-in { max-width: 1040px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; justify-content: space-between; }
+.tray-main { font-size: 14px; min-width: 0; }
+.tray-main strong { font-family: var(--font-data); font-size: 18px; font-variant-numeric: tabular-nums; }
+.tray-sub { font-size: 12px; color: var(--muted); }
+.clear { font: 500 13px var(--font-body); background: none; border: 0; color: var(--accent); cursor: pointer; text-decoration: underline; padding: 6px 0; }
+.clear[hidden] { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .card { transition: border-color 0.15s, box-shadow 0.15s; }
+}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Para tres · 21 oct 2026</p>
+    <h1>Planes entre Fuengirola y Málaga</h1>
+    <p class="lede">Puntería, realidad virtual, arcade y escape room, todo de 30 minutos en adelante. Ordénalos por cercanía a Málaga o por precio y marca los que os interesen para ver cuánto sale entre tres.</p>
+    <ul class="facts">
+      <li><strong>Precios por persona</strong>, salvo Parapark, que cobra por sala</li>
+      <li><strong>Verde</strong> confirmado · <strong>gris</strong> sin precio publicado</li>
+    </ul>
+  </header>
+
+  <div class="controls">
+    <div class="row" id="sorts" role="group" aria-label="Ordenar"></div>
+    <div class="row" id="filters" role="group" aria-label="Filtrar por tipo"></div>
+  </div>
+
+  <main class="route" id="route"></main>
+
+  <footer>
+    <div>
+      <h2>De dónde salen los precios</h2>
+      <p>Los de Parapark, EVA, ArcadeXP y Urban Safari vienen de sus webs de reserva. Confirma siempre al reservar, porque pueden variar por día, hora o tamaño del grupo.</p>
+      <ul style="margin-top:8px">
+        <li><a href="https://www.yumping.com/laser-tag/zero-latency-malaga--e19766155" target="_blank" rel="noopener">Zero Latency en Yumping</a></li>
+        <li><a href="https://paraparkmalaga.es" target="_blank" rel="noopener">Parapark Málaga</a></li>
+        <li><a href="https://app.eva.gg/es-ES/pricing" target="_blank" rel="noopener">Tarifas de EVA</a></li>
+        <li><a href="https://arcadexp.com/reservar-malaga" target="_blank" rel="noopener">ArcadeXP</a> y <a href="https://urbansafari.es/malaga" target="_blank" rel="noopener">Urban Safari</a></li>
+        <li><a href="https://yujuland.com/batalla-de-arqueros-en-malaga/" target="_blank" rel="noopener">Yujuland, Batalla de Arqueros</a></li>
+        <li><a href="https://www.yumping.com/tiro-con-arco/club-malaga-de-tiro-con-arco--e19663006" target="_blank" rel="noopener">Club Málaga de Tiro con Arco</a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
+
+<div class="tray" aria-live="polite">
+  <div class="tray-in">
+    <div class="tray-main" id="trayMain"></div>
+    <button class="clear" id="clear" type="button" hidden>Vaciar plan</button>
+  </div>
+</div>
+
+<script>
+var PEOPLE = 3;
+
+// Orden de cercanía a Málaga capital
+var ZONES = [
+  { id: "malaga", name: "Málaga capital", sub: "Centro y zona de la estación María Zambrano" },
+  { id: "campanillas", name: "Campanillas", sub: "A unos 10 minutos de Málaga capital" },
+  { id: "fuengirola", name: "Fuengirola", sub: "Centro comercial Miramar" }
+];
+
+var TYPES = [
+  { id: "all", name: "Todo" },
+  { id: "vr", name: "Realidad virtual" },
+  { id: "escape", name: "Escape room" },
+  { id: "punteria", name: "Puntería" },
+  { id: "arcade", name: "Arcade" }
+];
+
+var SORTS = [
+  { id: "near", name: "Cerca de Málaga" },
+  { id: "price", name: "Más barato primero" }
+];
+
+// pp = precio por persona para ordenar (Parapark: 50 € entre 3). null = sin precio.
+var PLACES = [
+  {
+    id: "zero", zone: "fuengirola", type: "vr", art: "vr", kind: "Realidad virtual",
+    video: "https://www.youtube.com/watch?v=Cl9FXQ01UhQ", embed: "https://www.youtube.com/embed/Cl9FXQ01UhQ", photos: ["zero-1.jpg", "zero-2.jpg"],
+    photoAlts: ["Jugador con casco, auricular y arma de Zero Latency", "Grupo jugando en la arena de Zero Latency VR"],
+    name: "Zero Latency", amt: "20 €", per: "por persona", pp: 20, status: "ok", statusText: "Precio confirmado",
+    note: "Antes 30 €, con un 33 % de descuento en Yumping.", total3: 60,
+    dur: "30 min", group: "1 a 8 jugadores", where: "C.C. Miramar, Fuengirola",
+    three: "Tres entráis sin problema. Caminas por una arena grande con mochila, casco y arma.",
+    link: "https://www.yumping.com/laser-tag/zero-latency-malaga--e19766155", linkText: "Ver y reservar"
+  },
+  {
+    id: "parapark", zone: "malaga", type: "escape", art: "escape", kind: "Escape room",
+    video: "https://www.youtube.com/watch?v=C9JkP7_KFzI", embed: "https://www.youtube.com/embed/C9JkP7_KFzI",
+    name: "Parapark Málaga", amt: "50 €", per: "en total, 2 a 3 jugadores", pp: 50 / 3, status: "ok", statusText: "Precio confirmado",
+    note: "Según su web, 50 € por sala para 2 o 3 jugadores. Tocáis a unos 17 € cada uno.", total3: 50,
+    dur: "60 min", group: "Hasta 8 personas", where: "Calle Victoria 8, 1º dcha., frente a Plaza de la Merced", hours: "11:30 a 22:00, solo con reserva",
+    three: "La sala policial es de nivel medio-alto y el game master ajusta la dificultad. Teléfono: 672 018 849.",
+    link: "https://paraparkmalaga.es/reservar", linkText: "Ver y reservar"
+  },
+  {
+    id: "eva", zone: "malaga", type: "vr", art: "vr", kind: "Realidad virtual",
+    video: "https://www.youtube.com/watch?v=hZ6SionTXOA", embed: "https://www.youtube.com/embed/hZ6SionTXOA", photos: ["eva-1.jpg", "eva-2.jpg"],
+    photoAlts: ["Grupo caminando por la arena de EVA con cascos y armas de realidad virtual", "Una jugadora con el arma de realidad virtual en la arena de EVA"],
+    name: "EVA Málaga", amt: "19 €", per: "por persona", pp: 19, status: "ok", statusText: "Precio confirmado",
+    note: "Sesión de 40 minutos.", total3: 57,
+    dur: "40 min con briefing", group: "Hasta 10 jugadores", where: "Calle Alcalde Guillermo Rein 152, Málaga", hours: "L a V 16:00 a 00:00 · S y D 10:00 a 00:00",
+    three: "Arena de 500 m² con bar. Incluye EVA Karting GP en VR, de 1 a 7 jugadores, para quien no tiene carné.",
+    link: "https://app.eva.gg/es-ES/booking?locationId=84", linkText: "Ver y reservar"
+  },
+  {
+    id: "arcade", zone: "malaga", type: "arcade", art: "lava", kind: "Arcade",
+    video: "https://www.youtube.com/watch?v=Sr3t7I9awNw", embed: "https://www.youtube.com/embed/Sr3t7I9awNw", photos: ["lava-1.jpg", "lava-2.jpg"],
+    photoAlts: ["Dos personas saltando por el suelo de baldosas de colores de El Suelo es Lava", "Tres personas sobre el suelo iluminado de El Suelo es Lava"],
+    name: "El Suelo es Lava (ArcadeXP)", amt: "28 €", per: "por persona", pp: 28, status: "ok", statusText: "Precio confirmado",
+    note: "Precio de su web de reservas.", total3: 84,
+    dur: "50 min", group: "2 a 16 personas", where: "Calle Mauricio Moro Pareto 9, local 8B, junto a la estación María Zambrano",
+    three: "Hay más de 6 modos de juego, competitivos o colaborativos.",
+    link: "https://arcadexp.com/reservar-malaga", linkText: "Ver y reservar"
+  },
+  {
+    id: "hacha", zone: "malaga", type: "punteria", art: "axe", kind: "Tiro de hacha",
+    video: "https://www.youtube.com/watch?v=YjYrNZ3mMOI", embed: "https://www.youtube.com/embed/YjYrNZ3mMOI", photos: ["hacha-1.jpg", "hacha-2.jpg"],
+    photoAlts: ["Un jugador a punto de lanzar el hacha frente a las dianas de Urban Safari", "Primer plano de un jugador con el hacha sobre el hombro"],
+    name: "Urban Safari", amt: "16 €", per: "por persona", pp: 16, status: "ok", statusText: "Precio confirmado",
+    note: "Precio de su web de reservas.", total3: 48,
+    dur: "1 o 2 horas", group: "1 a 25 personas", where: "Calle Mauricio Moro Pareto 9, local 8B", hours: "El jueves 22 había huecos de 15:00 a 22:00 al consultarlo",
+    three: "Mismo local que ArcadeXP. Más de 50 objetos arrojadizos y monitor.",
+    link: "https://urbansafari.es/malaga", linkText: "Ver y reservar"
+  },
+  {
+    id: "club", zone: "malaga", type: "punteria", art: "target", kind: "Tiro con arco",
+    photos: ["club-1.jpg"], photoAlts: ["Grupo practicando tiro con arco en fila en la sala del club"],
+    name: "Club Málaga de Tiro con Arco", amt: "Sin precio", per: "consultar", pp: null, status: "none", statusText: "Sin precio publicado",
+    note: "Curso de iniciación con horario flexible y todo el material incluido.", total3: null,
+    dur: "Según curso", group: "A consultar", where: "Avenida Jenofonte s/n, Málaga",
+    three: "Es tiro con arco de verdad, con técnica. Habría que contactar para ver cómo lo plantean para tres.",
+    link: "https://www.yumping.com/tiro-con-arco/club-malaga-de-tiro-con-arco--e19663006", linkText: "Ver ficha"
+  },
+  {
+    id: "yuju", zone: "campanillas", type: "punteria", art: "bow", kind: "Tiro con arco por equipos",
+    video: "https://www.instagram.com/reel/DYhrS1mkbcH/", videoHost: "Instagram", photos: ["yuju-1.jpg", "yuju-2.jpg"],
+    photoAlts: ["Un jugador tensando el arco con flecha de espuma en una partida de Yujuland", "Dos jugadores con mascara y arco detras de una barrera hinchable roja"],
+    name: "Batalla de Arqueros (Yujuland)", amt: "20 €", per: "por persona", pp: 20, status: "ok", statusText: "Precio confirmado",
+    note: "Incluye arcos, flechas de espuma, máscara y monitor.", total3: 60,
+    dur: "1 hora", group: "Mínimo 2 equipos, ideal de 8 a 20", where: "Campanillas, junto al Parque Tecnológico",
+    three: "Hay que preguntar si lo montan para tres. WhatsApp: 672 709 841. Edad mínima 12 años.",
+    link: "https://yujuland.com/batalla-de-arqueros-en-malaga/", linkText: "Ver actividad"
+  }
+];
+
+// Ilustraciones en SVG, con los colores del tema
+var ARTS = {
+  vr: '<rect x="108" y="32" width="104" height="48" rx="16" fill="var(--surface)" stroke="var(--accent)" stroke-width="3"/><circle cx="144" cy="56" r="11" fill="none" stroke="var(--accent)" stroke-width="3"/><circle cx="176" cy="56" r="11" fill="none" stroke="var(--accent)" stroke-width="3"/><path d="M108 56H84M212 56h24" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/><path d="M40 22l10 10M280 24l-9 9M52 88l9-6M268 86l-10-6" stroke="var(--warn)" stroke-width="3" stroke-linecap="round"/>',
+  escape: '<rect x="126" y="14" width="68" height="84" rx="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="3"/><circle cx="180" cy="58" r="4" fill="var(--accent)"/><circle cx="60" cy="58" r="12" fill="none" stroke="var(--warn)" stroke-width="3"/><path d="M72 58h46M98 58v9M108 58v7" stroke="var(--warn)" stroke-width="3" stroke-linecap="round"/><path d="M226 40h40M226 58h28M226 76h36" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" opacity=".5"/>',
+  lava: '<path d="M0 84q20-12 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0V110H0z" fill="var(--warn)" opacity=".85"/><rect x="40" y="62" width="48" height="12" rx="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="3"/><rect x="136" y="46" width="48" height="12" rx="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="3"/><rect x="232" y="30" width="48" height="12" rx="3" fill="var(--surface)" stroke="var(--accent)" stroke-width="3"/><path d="M60 52l-4-12M64 52l4-14" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>',
+  axe: '<path d="M118 96L178 22" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/><path d="M168 18q22-4 30 14-18 6-34-2z" fill="var(--surface)" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round"/><g transform="translate(250 56)"><circle r="32" fill="var(--surface)" stroke="var(--accent)" stroke-width="3"/><circle r="20" fill="none" stroke="var(--accent)" stroke-width="3"/><circle r="8" fill="var(--warn)"/></g>',
+  bow: '<path d="M126 12Q62 56 126 100" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/><path d="M126 12V100" stroke="var(--accent)" stroke-width="2"/><path d="M92 56H236" stroke="var(--warn)" stroke-width="4" stroke-linecap="round"/><path d="M236 56l-12-8M236 56l-12 8M96 56l-8-8M96 56l-8 8" stroke="var(--warn)" stroke-width="4" stroke-linecap="round"/><circle cx="264" cy="56" r="26" fill="var(--surface)" stroke="var(--accent)" stroke-width="3"/><circle cx="264" cy="56" r="12" fill="none" stroke="var(--accent)" stroke-width="3"/>',
+  target: '<g transform="translate(160 56)"><circle r="40" fill="var(--surface)" stroke="var(--accent)" stroke-width="3"/><circle r="26" fill="none" stroke="var(--accent)" stroke-width="3"/><circle r="12" fill="var(--accent)"/></g><path d="M250 10L166 52M250 10l-12 2M250 10l-2 12M240 18l-12 2" stroke="var(--warn)" stroke-width="4" stroke-linecap="round"/>'
+};
+
+var state = { type: "all", sort: "near", picked: {} };
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+
+function chips(list, current, attr) {
+  return list.map(function (t) {
+    return '<button type="button" class="chip" data-' + attr + '="' + t.id + '" aria-pressed="' + (current === t.id) + '">' + esc(t.name) + "</button>";
+  }).join("");
+}
+
+function renderControls() {
+  document.getElementById("sorts").innerHTML = '<span class="row-label">Ordenar</span>' + chips(SORTS, state.sort, "sort");
+  document.getElementById("filters").innerHTML = '<span class="row-label">Tipo</span>' + chips(TYPES, state.type, "type");
+}
+
+function media(p) {
+  if (!p.video && !p.photos) return '<svg class="art" viewBox="0 0 320 110" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Ilustración: ' + esc(p.kind) + '">' + ARTS[p.art] + '</svg>';
+  var s = p.embed ? '<div class="slide emb"><iframe src="' + esc(p.embed) + '" title="Vídeo de ' + esc(p.name) + '" loading="lazy" allowfullscreen allow="encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>' : !p.video ? '' : '<a class="slide vid" href="' + esc(p.video) + '" target="_blank" rel="noopener"><span class="play"></span><span class="cap">Ver el vídeo de ' + esc(p.name) + '<small>Se abre en ' + esc(p.videoHost || 'YouTube') + '</small></span></a>';
+  (p.photos || []).forEach(function (src, i) { s += '<div class="slide"><img src="' + esc(src) + '" alt="' + esc(p.photoAlts[i]) + '" loading="lazy"></div>'; });
+  var n = (p.video ? 1 : 0) + (p.photos || []).length;
+  var dots = '';
+  if (n > 1) for (var d = 0; d < n; d++) dots += d === 0 ? '<i class="on"></i>' : '<i></i>';
+  var arrows = n > 1 ? '<button type="button" class="nav prev" aria-label="Anterior">‹</button><button type="button" class="nav next" aria-label="Siguiente">›</button>' : '';
+  return '<div class="car"><div class="slides">' + s + '</div>' + arrows + '<div class="dots" aria-hidden="true">' + dots + '</div></div>';
+}
+
+function card(p) {
+  var picked = !!state.picked[p.id];
+  var rows = '<dt>Duración</dt><dd>' + esc(p.dur) + '</dd><dt>Grupo</dt><dd>' + esc(p.group) + '</dd><dt>Dónde</dt><dd>' + esc(p.where) + '</dd>';
+  if (p.hours) rows += '<dt>Horario</dt><dd>' + esc(p.hours) + '</dd>';
+  return '<article class="card' + (picked ? " picked" : "") + '">' +
+    media(p) +
+    '<div class="body">' +
+    '<div class="top"><div><p class="kind">' + esc(p.kind) + '</p><h3>' + esc(p.name) + '</h3></div>' +
+    '<div class="price"><div class="amt">' + esc(p.amt) + '</div><div class="per">' + esc(p.per) + '</div></div></div>' +
+    '<div><span class="badge ' + p.status + '">' + esc(p.statusText) + '</span><p class="pricenote">' + esc(p.note) + '</p></div>' +
+    '<div><dl>' + rows + '</dl><p class="forthree"><b>Para tres:</b> ' + esc(p.three) + '</p></div>' +
+    '<div class="actions"><button type="button" class="add" data-id="' + p.id + '" aria-pressed="' + picked + '">' + (picked ? "En el plan" : "Añadir al plan") + '</button>' +
+    '<a class="visit" href="' + esc(p.link) + '" target="_blank" rel="noopener">' + esc(p.linkText) + '</a></div>' +
+    '</div></article>';
+}
+
+function visible() {
+  return PLACES.filter(function (p) { return state.type === "all" || p.type === state.type; });
+}
+
+function renderRoute() {
+  var html = "";
+  var items = visible();
+  if (state.sort === "price") {
+    items = items.slice().sort(function (a, b) {
+      if (a.pp === null) return 1;
+      if (b.pp === null) return -1;
+      return a.pp - b.pp;
+    });
+    if (items.length) html = '<section class="flat"><h2>De más barato a más caro</h2><p class="sub">Precio por persona. Parapark se calcula repartiendo los 50 € entre tres.</p><div class="cards">' + items.map(card).join("") + "</div></section>";
+  } else {
+    ZONES.forEach(function (z) {
+      var zi = items.filter(function (p) { return p.zone === z.id; });
+      if (!zi.length) return;
+      html += '<section class="station"><h2>' + esc(z.name) + '</h2><p class="sub">' + esc(z.sub) + '</p><div class="cards">' + zi.map(card).join("") + "</div></section>";
+    });
+  }
+  if (!html) html = '<p class="empty">No hay planes de este tipo en la lista.</p>';
+  document.getElementById("route").innerHTML = html;
+}
+
+function renderTray() {
+  var ids = Object.keys(state.picked).filter(function (k) { return state.picked[k]; });
+  var main = document.getElementById("trayMain");
+  var clear = document.getElementById("clear");
+  if (!ids.length) {
+    main.innerHTML = '<span class="tray-sub">Tu plan está vacío. Pulsa «Añadir al plan» en los que os interesen.</span>';
+    clear.hidden = true;
+    return;
+  }
+  var total = 0, pending = 0;
+  ids.forEach(function (id) {
+    var p = PLACES.filter(function (x) { return x.id === id; })[0];
+    if (p.total3 === null) pending += 1; else total += p.total3;
+  });
+  var sub = ids.length + (ids.length === 1 ? " actividad" : " actividades") + " para " + PEOPLE + " personas";
+  if (pending) sub += " · " + pending + " sin precio, no incluida" + (pending > 1 ? "s" : "");
+  main.innerHTML = '<strong>' + Math.round(total) + ' €</strong> <span class="tray-sub">' + esc(sub) + '</span>';
+  clear.hidden = false;
+}
+
+function renderAll() { renderControls(); renderRoute(); renderTray(); }
+
+document.addEventListener("click", function (e) {
+  var nav = e.target.closest(".nav");
+  if (nav) {
+    var sl = nav.parentNode.querySelector(".slides");
+    sl.scrollBy({ left: (nav.classList.contains("next") ? 1 : -1) * sl.clientWidth, behavior: "smooth" });
+    return;
+  }
+  var chip = e.target.closest(".chip");
+  if (chip) {
+    if (chip.hasAttribute("data-type")) state.type = chip.getAttribute("data-type");
+    if (chip.hasAttribute("data-sort")) state.sort = chip.getAttribute("data-sort");
+    renderAll(); return;
+  }
+  var add = e.target.closest(".add");
+  if (add) {
+    var id = add.getAttribute("data-id");
+    state.picked[id] = !state.picked[id];
+    renderRoute(); renderTray(); return;
+  }
+  if (e.target.id === "clear") { state.picked = {}; renderRoute(); renderTray(); }
+});
+
+document.addEventListener("scroll", function (e) {
+  var el = e.target;
+  if (!el || !el.classList || !el.classList.contains("slides")) return;
+  var i = Math.round(el.scrollLeft / el.clientWidth);
+  var dots = el.parentNode.querySelectorAll(".dots i");
+  for (var k = 0; k < dots.length; k++) dots[k].className = k === i ? "on" : "";
+}, true);
+
+renderAll();
+</script>
+
+</body>
+</html>
